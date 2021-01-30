@@ -8,7 +8,7 @@
           v-for="(marker, index) in marks"
           :key="index"
           :lat-lng="marker.point"
-          :icon="get_icon()"
+          :icon="get_icon(marker.icon)"
         >
           <l-popup
             :content="marker.label"
@@ -33,13 +33,16 @@ export default {
     };
   },
   methods: {
-    get_icon: function () {
-      return (new this.$L.Icon({
-        iconUrl: "cow.png",
+    get_icon: function (name) {
+      let icon_name = "marker.png";
+      if (name !== null && name !== undefined){
+        icon_name = name;
+      }
+      return new this.$L.Icon({
+        iconUrl: "icons/"+icon_name,
         iconSize: [40, 40],
         iconAnchor: [21, 35],
-        popupAnchor: [-3, -76],
-      }))
+      })
     },
     load_landmarks: function (json) {
       for (var p = 0; p < json.length; p++) {
@@ -47,6 +50,7 @@ export default {
         this.marks.push({
           point: [point["lat"], point["lon"]],
           label: point["name"],
+          icon: point["icon"]
         });
       }
     },

@@ -1,37 +1,43 @@
 [
     {
         "name": "Nacimiento",
-        "icon": "",
+        "icon": "marker.png",
         "lat": 6.7406389,
         "lon": -72.7926458
     },
     {
         "name": "Hoyo Frio",
+        "icon": "marker.png",
         "lat": 6.73914,
         "lon": -72.7916279
     },
     {
         "name": "Salineadero",
+        "icon": "marker.png",
         "lat": 6.734878,
         "lon": -72.7725842
     },
     {
         "name": "Antena",
+        "icon": "antenna.png",
         "lat": 6.7346666,
         "lon": -72.7717729
     },
     {
         "name": "Arriba del Ortigal",
+        "icon": "marker.png",
         "lat": 6.7358327,
         "lon": -72.7714788
     },
     {
         "name": "Loma de las Flores",
+        "icon": "marker.png",
         "lat": 6.7370346,
         "lon": -72.7715797
     },
       {
         "name": "Portillo",
+        "icon": "marker.png",
         "lat": 6.7375081,
         "lon": -72.7712502
     }
