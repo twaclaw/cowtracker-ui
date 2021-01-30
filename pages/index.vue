@@ -8,6 +8,7 @@
           v-for="(marker, index) in marks"
           :key="index"
           :lat-lng="marker.point"
+          :icon="get_icon()"
         >
           <l-popup
             :content="marker.label"
@@ -32,8 +33,16 @@ export default {
     };
   },
   methods: {
+    get_icon: function () {
+      return (new this.$L.Icon({
+        iconUrl: "cow.png",
+        iconSize: [40, 40],
+        iconAnchor: [21, 35],
+        popupAnchor: [-3, -76],
+      }))
+    },
     load_landmarks: function (json) {
-      for (var p=0; p < json.length; p++) {
+      for (var p = 0; p < json.length; p++) {
         var point = json[p];
         this.marks.push({
           point: [point["lat"], point["lon"]],
