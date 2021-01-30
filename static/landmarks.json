@@ -1,0 +1,39 @@
+[
+    {
+        "name": "Nacimiento",
+        "icon": "",
+        "lat": 6.7406389,
+        "lon": -72.7926458
+    },
+    {
+        "name": "Hoyo Frio",
+        "lat": 6.73914,
+        "lon": -72.7916279
+    },
+    {
+        "name": "Salineadero",
+        "lat": 6.734878,
+        "lon": -72.7725842
+    },
+    {
+        "name": "Antena",
+        "lat": 6.7346666,
+        "lon": -72.7717729
+    },
+    {
+        "name": "Arriba del Ortigal",
+        "lat": 6.7358327,
+        "lon": -72.7714788
+    },
+    {
+        "name": "Loma de las Flores",
+        "lat": 6.7370346,
+        "lon": -72.7715797
+    },
+      {
+        "name": "Portillo",
+        "lat": 6.7375081,
+        "lon": -72.7712502
+    }
+
+]
