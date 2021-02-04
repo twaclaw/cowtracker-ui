@@ -1,7 +1,7 @@
 <template>
   <div id="map-wrap" style="height: 100vh">
     <no-ssr>
-      <l-map :zoom="16" :center="map_center">
+      <l-map :zoom="15" :maxZoom="17" :center="map_center">
         <l-tile-layer :url="layer_tile"></l-tile-layer>
 
         <l-marker
@@ -35,14 +35,14 @@ export default {
   methods: {
     get_icon: function (name) {
       let icon_name = "marker.png";
-      if (name !== null && name !== undefined){
+      if (name !== null && name !== undefined) {
         icon_name = name;
       }
       return new this.$L.Icon({
-        iconUrl: "icons/"+icon_name,
-        iconSize: [40, 40],
+        iconUrl: "icons/" + icon_name,
+        iconSize: [30, 30],
         iconAnchor: [21, 35],
-      })
+      });
     },
     load_landmarks: function (json) {
       for (var p = 0; p < json.length; p++) {
@@ -50,7 +50,7 @@ export default {
         this.marks.push({
           point: [point["lat"], point["lon"]],
           label: point["name"],
-          icon: point["icon"]
+          icon: point["icon"],
         });
       }
     },
