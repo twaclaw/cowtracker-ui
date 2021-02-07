@@ -35,11 +35,22 @@
         "lat": 6.7370346,
         "lon": -72.7715797
     },
-      {
+    {
         "name": "Portillo",
         "icon": "marker.png",
         "lat": 6.7375081,
         "lon": -72.7712502
+    },
+    {
+        "name": "El Pajal",
+        "icon": "marker.png",
+        "lat": 6.7348391,
+        "lon": -72.7690963
+    },
+    {
+        "name": "Nacimiento",
+        "icon": "marker_blue.png",
+        "lat": 6.7348198,
+        "lon": -72.7710802
     }
-
 ]

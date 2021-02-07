@@ -40,8 +40,8 @@ export default {
       }
       return new this.$L.Icon({
         iconUrl: "icons/" + icon_name,
-        iconSize: [30, 30],
-        iconAnchor: [21, 35],
+        iconSize: [20, 20],
+        iconAnchor: [20, 10],
       });
     },
     load_landmarks: function (json) {
