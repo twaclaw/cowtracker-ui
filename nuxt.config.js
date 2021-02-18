@@ -37,9 +37,19 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/bootstrap
     'bootstrap-vue/nuxt',
-    'nuxt-leaflet'
+    'nuxt-leaflet',
+    '@nuxtjs/axios',
+    '@nuxtjs/proxy'
   ],
-
+  axios: {
+    // proxy: true
+  },
+  proxy: {
+    '/api/v1': { target: 'http://localhost:8080/api/v1', pathRewrite: {'^/api/v1': ''}}
+  },
+  bootstrapVue: {
+    icons: true
+  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   }

@@ -1,23 +1,53 @@
 <template>
-  <div id="map-wrap" style="height: 100vh">
-    <no-ssr>
-      <l-map :zoom="15" :maxZoom="17" :center="map_center">
-        <l-tile-layer :url="layer_tile"></l-tile-layer>
+  <b-container fluid="xl">
+    <b-dropdown text="Which cow?" class="m-md-2">
+      <b-dropdown-item>all</b-dropdown-item>
+      <b-dropdown-item
+        v-for="(name, index) in cow_names"
+        :key="index"
+        @click="get_selected_cow(name)"
+      >
+        {{ name }}
+      </b-dropdown-item>
+    </b-dropdown>
 
-        <l-marker
-          v-for="(marker, index) in marks"
-          :key="index"
-          :lat-lng="marker.point"
-          :icon="get_icon(marker.icon)"
-        >
-          <l-popup
-            :content="marker.label"
-            :options="{ autoClose: false, closeOnClick: false }"
-          ></l-popup>
-        </l-marker>
-      </l-map>
-    </no-ssr>
-  </div>
+    <div id="map-wrap" style="height: 90vh">
+      <no-ssr>
+        <cow-info></cow-info>
+        <l-map :zoom="15" :maxZoom="17" :center="map_center">
+          <l-tile-layer :url="layer_tile"></l-tile-layer>
+
+          <!-- landmarks -->
+          <l-marker
+            v-for="(marker, index) in marks"
+            :key="index"
+            :lat-lng="marker.point"
+            :icon="get_icon(marker.icon)"
+          >
+            <l-popup
+              :content="marker.label"
+              :options="{ autoClose: false, closeOnClick: false }"
+            ></l-popup>
+          </l-marker>
+
+          <!-- Cows -->
+          <l-marker
+            v-for="(cow, index) in all_cows"
+            :key="index"
+            :lat-lng="[cow.pos.lat, cow.pos.lon]"
+            :icon="get_icon('cow.png')"
+            @click="marker_click(cow)"
+          >
+          </l-marker>
+          <cow-info
+            :meas="selected_cow"
+            :visible="visible_cow_modal !== null"
+            @hide="hide_modal()"
+          ></cow-info>
+        </l-map>
+      </no-ssr>
+    </div>
+  </b-container>
 </template>
 
 <script>
@@ -27,12 +57,28 @@ export default {
   data() {
     return {
       map_center: [6.74, -72.78],
+      visible_cow_modal: null,
+      selected_cow: null,
       layer_tile:
         "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
       marks: [],
+      cow_names: [],
+      all_cows: [],
+
     };
   },
   methods: {
+    async fetch_names() {
+      await this.$axios.$get("/api/v1/names").then((response) => {
+        this.cow_names = response;
+      });
+    },
+    async fetch_all_cow_coords(name) {
+      await this.$axios.$get("/api/v1/meas/all").then((data) => {
+        this.all_cows = data;
+      });
+    },
+
     get_icon: function (name) {
       let icon_name = "marker.png";
       if (name !== null && name !== undefined) {
@@ -54,9 +100,26 @@ export default {
         });
       }
     },
+    display_modal: function (cow) {
+      this.selected_cow = cow;
+      this.visible_cow_modal = cow.name;
+    },
+    hide_modal: function () {
+      this.visible_cow_modal = null;
+    },
+    marker_click: function (cow) {
+      this.display_modal(cow);
+    },
+    get_selected_cow: function (name) {
+      if (name === "all") {
+        this.fetch_all_cow_coords();
+      }
+    },
   },
   mounted() {
     this.load_landmarks(landmarks);
+    this.fetch_names();
+    this.get_selected_cow("all");
   },
 };
 </script>
