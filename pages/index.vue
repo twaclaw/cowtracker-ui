@@ -1,15 +1,25 @@
 <template>
   <b-container fluid="xl">
-    <b-dropdown text="Which cow?" class="m-md-2">
-      <b-dropdown-item>all</b-dropdown-item>
-      <b-dropdown-item
-        v-for="(name, index) in cow_names"
-        :key="index"
-        @click="get_selected_cow(name)"
+    <b-row>
+      <b-dropdown text="Which cow?" class="m-md-2">
+        <b-dropdown-item @click="get_selected_cow('all')">all</b-dropdown-item>
+        <b-dropdown-item
+          v-for="(name, index) in cow_names"
+          :key="index"
+          @click="get_selected_cow(name)"
+        >
+          {{ name }}
+        </b-dropdown-item>
+      </b-dropdown>
+      <b-form-checkbox
+        class="m-md-2"
+        id="checkbox-1"
+        v-model="display_landmarks"
+        name="checkbox-1"
       >
-        {{ name }}
-      </b-dropdown-item>
-    </b-dropdown>
+        Landmarks
+      </b-form-checkbox>
+    </b-row>
 
     <div id="map-wrap" style="height: 90vh">
       <no-ssr>
@@ -19,6 +29,7 @@
 
           <!-- landmarks -->
           <l-marker
+            :visible="display_landmarks"
             v-for="(marker, index) in marks"
             :key="index"
             :lat-lng="marker.point"
@@ -33,12 +44,23 @@
           <!-- Cows -->
           <l-marker
             v-for="(cow, index) in all_cows"
-            :key="index"
+            :key="'cow' + index"
             :lat-lng="[cow.pos.lat, cow.pos.lon]"
             :icon="get_icon('cow.png')"
             @click="marker_click(cow)"
           >
           </l-marker>
+
+          <!-- Cow history  -->
+          <l-marker
+            v-for="(cow, index) in cow_history"
+            :key="'cow_his' + index"
+            :lat-lng="[cow.pos.lat, cow.pos.lon]"
+            :icon="get_icon('map-marker.png')"
+            @click="marker_click(cow)"
+          >
+          </l-marker>
+
           <cow-info
             :meas="selected_cow"
             :visible="visible_cow_modal !== null"
@@ -64,7 +86,8 @@ export default {
       marks: [],
       cow_names: [],
       all_cows: [],
-
+      cow_history: [],
+      display_landmarks: false
     };
   },
   methods: {
@@ -73,9 +96,16 @@ export default {
         this.cow_names = response;
       });
     },
-    async fetch_all_cow_coords(name) {
+    async fetch_all_cow_coords() {
       await this.$axios.$get("/api/v1/meas/all").then((data) => {
         this.all_cows = data;
+        this.cow_history = [];
+      });
+    },
+    async fetch_cow_coords_history(name) {
+      await this.$axios.$get("/api/v1/meas/" + name).then((data) => {
+        this.cow_history = data.slice(1);
+        this.all_cows = [data[0]];
       });
     },
 
@@ -86,7 +116,7 @@ export default {
       }
       return new this.$L.Icon({
         iconUrl: "icons/" + icon_name,
-        iconSize: [20, 20],
+        iconSize: [30, 30],
         iconAnchor: [20, 10],
       });
     },
@@ -113,6 +143,8 @@ export default {
     get_selected_cow: function (name) {
       if (name === "all") {
         this.fetch_all_cow_coords();
+      } else {
+        this.fetch_cow_coords_history(name);
       }
     },
   },

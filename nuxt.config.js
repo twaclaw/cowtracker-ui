@@ -39,7 +39,8 @@ export default {
     'bootstrap-vue/nuxt',
     'nuxt-leaflet',
     '@nuxtjs/axios',
-    '@nuxtjs/proxy'
+    '@nuxtjs/proxy',
+    '@nuxtjs/moment'
   ],
   axios: {
     // proxy: true

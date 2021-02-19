@@ -8,6 +8,16 @@
     <template #modal-title
       ><h3 class="d-block text-center">{{ name }}</h3>
     </template>
+
+    <b-alert
+      v-for="(w, index) in warnings"
+      :key="index"
+      :variant="w.variant"
+      show
+      dismissible
+      >{{ w.msg }}</b-alert
+    >
+
     <div class="d-block text-center">
       <b-avatar
         badge
@@ -20,7 +30,7 @@
 
     <b-list-group-item>
       <p class="h5 mb-1">
-        <b-icon icon="clock"></b-icon>
+        <b-icon icon="clock" :variant="time_variant"></b-icon>
         {{ last_seen }}
       </p>
     </b-list-group-item>
@@ -41,7 +51,7 @@
       </b-list-group-item>
       <b-list-group-item>
         <p class="h5 mb-1">
-          <b-icon icon="battery-full" :variant="battery_variant"></b-icon>
+          <b-icon :icon="battery_icon" :variant="battery_variant"></b-icon>
           {{ battery }}
         </p>
       </b-list-group-item>
@@ -52,6 +62,7 @@
         </p>
       </b-list-group-item>
     </b-list-group>
+
     <!-- <b-button class="mt-3" block @click="$bvModal.hide('cowinfo')"
       >Close</b-button
     > -->
@@ -62,7 +73,9 @@
 export default {
   data() {
     return {
+      battery_icon: "battery-full",
       battery_variant: "",
+      time_variant: "",
     };
   },
   props: {
@@ -77,7 +90,7 @@ export default {
     },
     avatar() {
       if (this.meas) {
-        return "images/"+this.meas.name+".jpg";
+        return "images/" + this.meas.name + ".jpg";
       }
     },
     battery() {
@@ -96,16 +109,12 @@ export default {
     },
     last_seen() {
       if (this.meas) {
-        var utcSeconds = this.meas.t;
-        var d = new Date(0);
-        d.setUTCSeconds(utcSeconds);
-        var options = {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        };
-        return d.toLocaleString(options);
+        var format = "HH:mm DD/MM";
+        var timestamp = this.$moment.unix(this.meas.t);
+        var utcOffset = this.$moment().utcOffset();
+        var local_time = timestamp.add(utcOffset, "minutes");
+        var dateString = local_time.format(format)
+        return dateString;
       }
       return "";
     },
@@ -113,6 +122,35 @@ export default {
       return this.meas
         ? "snr: " + this.meas.snr + ", rssi: " + this.meas.rssi
         : "";
+    },
+    warnings() {
+      if (this.meas && this.meas.warnings) {
+        let warns = [];
+        for (let wi = 0; wi < this.meas.warnings.length; wi++) {
+          let w = this.meas.warnings[wi];
+          if (w.code === "WARN_NO_MSGS_RECV") {
+            this.time_variant = w.variant;
+          } else if (w.code === "WARN_BATT_LOW") {
+            this.battery_variant = w.variant;
+            if (w.variant === "warning") {
+              this.battery_icon = "battery-half";
+            } else if (w.variant === "danger") {
+              this.battery_icon = "battery-half";
+            }
+          } else if (w.code === "WARN_COW_NOT_MOVING") {
+            warns.push({
+              variant: w.variant,
+              msg: "El animal no se mueve hace más de" + w.value + "h",
+            });
+          } else if (w.code === "WARN_COW_TOO_FAR") {
+            warns.push({
+              variant: w.variant,
+              msg: "El animal está a más de " + w.value + "m de la antena.",
+            });
+          }
+        }
+        return warns;
+      }
     },
   },
 };
