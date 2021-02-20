@@ -21,7 +21,7 @@
     <div class="d-block text-center">
       <b-avatar
         badge
-        badge-variant="warning"
+        :badge-variant="status"
         size="10em"
         variant="primary"
         :src="avatar"
@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import "moment/locale/es";
 export default {
   data() {
     return {
@@ -81,6 +82,14 @@ export default {
   props: {
     meas: Object,
     visible: Boolean,
+  },
+  methods: {
+    set_lang: function (lang) {
+      this.$moment.locale(lang);
+    },
+  },
+  mounted() {
+    this.set_lang("es");
   },
   computed: {
     name() {
@@ -109,12 +118,13 @@ export default {
     },
     last_seen() {
       if (this.meas) {
-        var format = "HH:mm DD/MM";
+        var format = "HH:mm MMMM DD";
         var timestamp = this.$moment.unix(this.meas.t);
         var utcOffset = this.$moment().utcOffset();
         var local_time = timestamp.add(utcOffset, "minutes");
-        var dateString = local_time.format(format)
-        return dateString;
+        var dateString = local_time.format(format);
+        var from_now = local_time.fromNow();
+        return from_now + " (" + dateString + ")";
       }
       return "";
     },
@@ -122,6 +132,9 @@ export default {
       return this.meas
         ? "snr: " + this.meas.snr + ", rssi: " + this.meas.rssi
         : "";
+    },
+    status() {
+      return this.meas ? this.meas.status : "info";
     },
     warnings() {
       if (this.meas && this.meas.warnings) {

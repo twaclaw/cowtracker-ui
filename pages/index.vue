@@ -24,7 +24,7 @@
     <div id="map-wrap" style="height: 90vh">
       <no-ssr>
         <cow-info></cow-info>
-        <l-map :zoom="15" :maxZoom="17" :center="map_center">
+        <l-map :zoom="16" :maxZoom="17" :center="map_center">
           <l-tile-layer :url="layer_tile"></l-tile-layer>
 
           <!-- landmarks -->
@@ -46,7 +46,7 @@
             v-for="(cow, index) in all_cows"
             :key="'cow' + index"
             :lat-lng="[cow.pos.lat, cow.pos.lon]"
-            :icon="get_icon('cow.png')"
+            :icon="get_icon('cow-' + cow.status + '.png')"
             @click="marker_click(cow)"
           >
           </l-marker>
@@ -57,8 +57,11 @@
             :key="'cow_his' + index"
             :lat-lng="[cow.pos.lat, cow.pos.lon]"
             :icon="get_icon('map-marker.png')"
-            @click="marker_click(cow)"
           >
+            <l-popup
+              :content="when_seen(index, cow)"
+              :options="{ autoClose: false, closeOnClick: false }"
+            ></l-popup>
           </l-marker>
 
           <cow-info
@@ -78,7 +81,7 @@ import landmarks from "../static/landmarks.json";
 export default {
   data() {
     return {
-      map_center: [6.74, -72.78],
+      map_center: [6.734878, -72.7725842],
       visible_cow_modal: null,
       selected_cow: null,
       layer_tile:
@@ -87,9 +90,10 @@ export default {
       cow_names: [],
       all_cows: [],
       cow_history: [],
-      display_landmarks: false
+      display_landmarks: false,
     };
   },
+
   methods: {
     async fetch_names() {
       await this.$axios.$get("/api/v1/names").then((response) => {
@@ -108,7 +112,13 @@ export default {
         this.all_cows = [data[0]];
       });
     },
-
+    when_seen: function (index, cow) {
+      var timestamp = this.$moment.unix(cow.t);
+      var utcOffset = this.$moment().utcOffset();
+      var local_time = timestamp.add(utcOffset, "minutes");
+      var from_now = local_time.fromNow();
+      return "[-" + (index + 1) + "] " + from_now;
+    },
     get_icon: function (name) {
       let icon_name = "marker.png";
       if (name !== null && name !== undefined) {
@@ -116,8 +126,8 @@ export default {
       }
       return new this.$L.Icon({
         iconUrl: "icons/" + icon_name,
-        iconSize: [30, 30],
-        iconAnchor: [20, 10],
+        iconSize: [15, 15],
+        iconAnchor: [],
       });
     },
     load_landmarks: function (json) {
