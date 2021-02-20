@@ -1,7 +1,7 @@
 <template>
   <b-container fluid="xl">
     <b-row>
-      <b-dropdown text="Which cow?" class="m-md-2">
+      <b-dropdown text="Select" class="m-md-2">
         <b-dropdown-item @click="get_selected_cow('all')">all</b-dropdown-item>
         <b-dropdown-item
           v-for="(name, index) in cow_names"
