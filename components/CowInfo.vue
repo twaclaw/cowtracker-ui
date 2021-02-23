@@ -118,7 +118,7 @@ export default {
     },
     last_seen() {
       if (this.meas) {
-        var format = "HH:mm MMMM DD";
+        var format = "HH:mm MMM DD";
         var timestamp = this.$moment.unix(this.meas.t);
         var utcOffset = this.$moment().utcOffset();
         var local_time = timestamp.add(utcOffset, "minutes");
