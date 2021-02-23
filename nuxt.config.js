@@ -43,10 +43,12 @@ export default {
     '@nuxtjs/moment'
   ],
   axios: {
-    // proxy: true
+    proxy: true
   },
   proxy: {
-    '/api/v1': { target: 'http://localhost:8080/api/v1', pathRewrite: {'^/api/v1': ''}}
+    '/api/v1': {
+      target: process.env.BASE_URL || 'http://pangote.fernandosandoval.eu:8080'
+    }
   },
   bootstrapVue: {
     icons: true

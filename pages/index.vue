@@ -1,24 +1,30 @@
 <template>
   <b-container fluid="xl">
-    <b-row>
-      <b-dropdown text="Select" class="m-md-2">
-        <b-dropdown-item @click="get_selected_cow('all')">all</b-dropdown-item>
-        <b-dropdown-item
-          v-for="(name, index) in cow_names"
-          :key="index"
-          @click="get_selected_cow(name)"
+    <b-row align-v="stretch">
+      <b-col>
+        <b-dropdown text="Select" class="m-md-2">
+          <b-dropdown-item @click="get_selected_cow('all')"
+            >all</b-dropdown-item
+          >
+          <b-dropdown-item
+            v-for="(name, index) in cow_names"
+            :key="index"
+            @click="get_selected_cow(name)"
+          >
+            {{ name }}
+          </b-dropdown-item>
+        </b-dropdown>
+      </b-col>
+      <b-col>
+        <b-form-checkbox
+          class="m-md-2"
+          id="checkbox-1"
+          v-model="display_landmarks"
+          name="checkbox-1"
         >
-          {{ name }}
-        </b-dropdown-item>
-      </b-dropdown>
-      <b-form-checkbox
-        class="m-md-2"
-        id="checkbox-1"
-        v-model="display_landmarks"
-        name="checkbox-1"
-      >
-        Landmarks
-      </b-form-checkbox>
+          Landmarks
+        </b-form-checkbox>
+      </b-col>
     </b-row>
 
     <div id="map-wrap" style="height: 90vh">
