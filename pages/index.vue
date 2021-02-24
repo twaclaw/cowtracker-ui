@@ -120,10 +120,8 @@ export default {
     },
     when_seen: function (index, cow) {
       var tz = this.$moment.tz.guess();
-      var cowutc = this.$moment.unix(cow.t);
-      var offset = this.$moment().utcOffset();
-      var cowlocal = this.$moment(cowutc).add(offset, "minutes").tz(tz);
-      var from_now = cowlocal.fromNow();
+      var cowutc = this.$moment.unix(cow.t).utc();
+      var from_now = cowutc.fromNow();
 
       return "[-" + (index + 1) + "] " + from_now;
     },
