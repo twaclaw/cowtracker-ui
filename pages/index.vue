@@ -130,10 +130,12 @@ export default {
       if (name !== null && name !== undefined) {
         icon_name = name;
       }
+      let x = 18;
+      let y = 18;
       return new this.$L.Icon({
         iconUrl: "icons/" + icon_name,
-        iconSize: [15, 15],
-        iconAnchor: [],
+        iconSize: [x, y],
+        iconAnchor: [x-x/2, y-y/2],
       });
     },
     load_landmarks: function (json) {
