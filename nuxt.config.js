@@ -4,7 +4,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'cowtracker-ui',
+    title: 'Las vacas de don Edgar',
     htmlAttrs: {
       lang: 'en'
     },

@@ -119,11 +119,11 @@ export default {
     last_seen() {
       if (this.meas) {
         var format = "HH:mm MMM DD";
-        var timestamp = this.$moment.unix(this.meas.t);
-        var utcOffset = this.$moment().utcOffset();
-        var local_time = timestamp.add(utcOffset, "minutes");
-        var dateString = local_time.format(format);
-        var from_now = local_time.fromNow();
+        var cowutc = this.$moment.unix(this.meas.t);
+        var offset = this.$moment().utcOffset();
+        var cowlocal = this.$moment(cowutc).add(offset, "minutes");
+        var dateString = cowlocal.format(format);
+        var from_now = cowlocal.fromNow();
         return from_now + " (" + dateString + ")";
       }
       return "";
