@@ -119,10 +119,12 @@ export default {
       });
     },
     when_seen: function (index, cow) {
-      var timestamp = this.$moment.unix(cow.t);
-      var utcOffset = this.$moment().utcOffset();
-      var local_time = timestamp.add(utcOffset, "minutes");
-      var from_now = local_time.fromNow();
+      var tz = this.$moment.tz.guess();
+      var cowutc = this.$moment.unix(cow.t);
+      var offset = this.$moment().utcOffset();
+      var cowlocal = this.$moment(cowutc).add(offset, "minutes").tz(tz);
+      var from_now = cowlocal.fromNow();
+
       return "[-" + (index + 1) + "] " + from_now;
     },
     get_icon: function (name) {
@@ -135,7 +137,7 @@ export default {
       return new this.$L.Icon({
         iconUrl: "icons/" + icon_name,
         iconSize: [x, y],
-        iconAnchor: [x-x/2, y-y/2],
+        iconAnchor: [x - x / 2, y - y / 2],
       });
     },
     load_landmarks: function (json) {

@@ -53,6 +53,9 @@ export default {
   bootstrapVue: {
     icons: true
   },
+  moment: {
+    timezone: true
+  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   }
