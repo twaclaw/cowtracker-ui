@@ -2,14 +2,14 @@
     {
         "name": "Nacimiento",
         "icon": "marker_blue.png",
-        "lat": 6.733367,
-        "lon": -72.772620
+        "lat": 6.733629,
+        "lon": -72.772674
     },
     {
-        "name": "Hoyo Frio",
+        "name": "Hoyo frio",
         "icon": "marker.png",
-        "lat": 6.733295,
-        "lon": -72.772843
+        "lat": 6.733641,
+        "lon": -72.773233
     },
     {
         "name": "Salineadero",
@@ -30,9 +30,9 @@
         "lon": -72.7714788
     },
     {
-        "name": "Loma de las Flores",
+       "name": "Loma de las Flores",
         "icon": "marker.png",
-        "lat": 6.7370346,
+       "lat": 6.7370346,
         "lon": -72.7715797
     },
     {
