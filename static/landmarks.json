@@ -2,14 +2,14 @@
     {
         "name": "Nacimiento",
         "icon": "marker_blue.png",
-        "lat": 6.7406389,
-        "lon": -72.7926458
+        "lat": 6.733367,
+        "lon": -72.772620
     },
     {
         "name": "Hoyo Frio",
         "icon": "marker.png",
-        "lat": 6.73914,
-        "lon": -72.7916279
+        "lat": 6.733295,
+        "lon": -72.772843
     },
     {
         "name": "Salineadero",
