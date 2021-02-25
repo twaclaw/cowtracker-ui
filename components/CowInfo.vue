@@ -159,7 +159,7 @@ export default {
           } else if (w.code === "WARN_COW_TOO_FAR") {
             warns.push({
               variant: w.variant,
-              msg: "El animal está a más de " + w.value + "m de la antena.",
+              msg: "A más de " + w.value + "m del salineadero.",
             });
           }
         }
