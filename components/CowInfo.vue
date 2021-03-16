@@ -87,6 +87,16 @@ export default {
     set_lang: function (lang) {
       this.$moment.locale(lang);
     },
+    from_now: function (unix_timestamp) {
+      var format = "HH:mm MMM DD";
+      var tz = this.$moment.tz.guess();
+      var cowutc = this.$moment.unix(unix_timestamp).utc();
+      var offset = this.$moment().tz(tz).utcOffset();
+      var cowlocal = this.$moment(cowutc).add(offset, "minutes");
+      var dateString = cowlocal.format(format);
+      var from_now = cowutc.fromNow();
+      return from_now + " (" + dateString + ")";
+    },
   },
   mounted() {
     this.set_lang("es");
@@ -118,14 +128,7 @@ export default {
     },
     last_seen() {
       if (this.meas) {
-        var format = "HH:mm MMM DD";
-        var tz = this.$moment.tz.guess();
-        var cowutc = this.$moment.unix(this.meas.t).utc();
-        var offset = this.$moment().tz(tz).utcOffset();
-        var cowlocal = this.$moment(cowutc).add(offset, "minutes");
-        var dateString = cowlocal.format(format);
-        var from_now = cowutc.fromNow();
-        return from_now + " (" + dateString + ")";
+        return this.from_now(this.meas.t);
       }
       return "";
     },
@@ -140,6 +143,10 @@ export default {
     warnings() {
       if (this.meas && this.meas.warnings) {
         let warns = [];
+        this.time_variant = "";
+        this.battery_variant = "";
+        this.battery_icon = "battery-full";
+
         for (let wi = 0; wi < this.meas.warnings.length; wi++) {
           let w = this.meas.warnings[wi];
           if (w.code === "WARN_NO_MSGS_RECV") {
@@ -154,12 +161,12 @@ export default {
           } else if (w.code === "WARN_COW_NOT_MOVING") {
             warns.push({
               variant: w.variant,
-              msg: "El animal no se mueve hace más de" + w.value + "h",
+              msg: "El animal no se mueve desde " + this.from_now(w.value),
             });
           } else if (w.code === "WARN_COW_TOO_FAR") {
             warns.push({
               variant: w.variant,
-              msg: "A más de " + w.value + "m del salineadero.",
+              msg: "A más de " + w.value + "m del Ortigal.",
             });
           }
         }

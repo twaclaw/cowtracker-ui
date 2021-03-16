@@ -47,16 +47,6 @@
             ></l-popup>
           </l-marker>
 
-          <!-- Cows -->
-          <l-marker
-            v-for="(cow, index) in all_cows"
-            :key="'cow' + index"
-            :lat-lng="[cow.pos.lat, cow.pos.lon]"
-            :icon="get_icon('cow-' + cow.status + '.png')"
-            @click="marker_click(cow)"
-          >
-          </l-marker>
-
           <!-- Cow history  -->
           <l-marker
             v-for="(cow, index) in cow_history"
@@ -68,6 +58,16 @@
               :content="when_seen(index, cow)"
               :options="{ autoClose: false, closeOnClick: false }"
             ></l-popup>
+          </l-marker>
+
+          <!-- Cows -->
+          <l-marker
+            v-for="(cow, index) in all_cows"
+            :key="'cow' + index"
+            :lat-lng="[cow.pos.lat, cow.pos.lon]"
+            :icon="get_icon('cow-' + cow.status + '.png')"
+            @click="marker_click(cow)"
+          >
           </l-marker>
 
           <cow-info
@@ -114,8 +114,8 @@ export default {
     },
     async fetch_cow_coords_history(name) {
       await this.$axios.$get("/api/v1/meas/" + name).then((data) => {
-        this.cow_history = data.slice(1);
         this.all_cows = [data[0]];
+        this.cow_history = data.slice(1);
       });
     },
     when_seen: function (index, cow) {
