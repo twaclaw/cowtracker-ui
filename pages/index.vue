@@ -66,6 +66,7 @@
             :key="'cow' + index"
             :lat-lng="[cow.pos.lat, cow.pos.lon]"
             :icon="get_icon('cow-' + cow.status + '.png')"
+            :z-index-offset="1000"
             @click="marker_click(cow)"
           >
           </l-marker>
