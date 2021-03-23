@@ -33,6 +33,12 @@
         <l-map :zoom="16" :maxZoom="17" :center="map_center">
           <l-tile-layer :url="layer_tile"></l-tile-layer>
 
+          <l-polyline
+            :lat-lngs="cow_history_polyline"
+            color="red"
+            :weight="2"
+          ></l-polyline>
+
           <!-- landmarks -->
           <l-marker
             :visible="display_landmarks"
@@ -97,6 +103,7 @@ export default {
       cow_names: [],
       all_cows: [],
       cow_history: [],
+      cow_history_polyline: [],
       display_landmarks: false,
     };
   },
@@ -111,12 +118,19 @@ export default {
       await this.$axios.$get("/api/v1/meas/all").then((data) => {
         this.all_cows = data;
         this.cow_history = [];
+        this.cow_history_polyline = [];
       });
     },
     async fetch_cow_coords_history(name) {
       await this.$axios.$get("/api/v1/meas/" + name).then((data) => {
         this.all_cows = [data[0]];
         this.cow_history = data.slice(1);
+        var current = data[0].pos;
+        this.cow_history_polyline = [[current.lat, current.lon]];
+        for (var i = 0; i < this.cow_history.length; i++) {
+          var point = this.cow_history[i].pos;
+          this.cow_history_polyline.push([point.lat, point.lon]);
+        }
       });
     },
     when_seen: function (index, cow) {
