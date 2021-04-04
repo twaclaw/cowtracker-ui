@@ -19,6 +19,6 @@ The trackers are based on GPS and implement the [LoRaWAN&reg;](https://lora-deve
 # Credits and Acknowledgements
 
 * Pictures: Fernando Sandoval
-* Edgar and Fernando Sandoval did a lot of working testing and deploying the solution
+* Edgar and Fernando Sandoval did a  lot of work testing and deploying the solution
 * Andrea M. gave me several hints regarding UI programming.
 * Cow icon by [Neel Mehta](https://www.shareicon.net/cow-491783)
