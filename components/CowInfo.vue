@@ -6,7 +6,7 @@
     hide-footer
   >
     <template #modal-title
-      ><h3 class="d-block text-center">{{ name }}</h3>
+      ><h3 class="d-block text-center">Tracker</h3>
     </template>
 
     <b-alert
@@ -17,16 +17,6 @@
       dismissible
       >{{ w.msg }}</b-alert
     >
-
-    <div class="d-block text-center">
-      <b-avatar
-        badge
-        :badge-variant="status"
-        size="10em"
-        variant="primary"
-        :src="avatar"
-      ></b-avatar>
-    </div>
 
     <b-list-group-item>
       <p class="h5 mb-1">
