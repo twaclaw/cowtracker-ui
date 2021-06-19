@@ -134,7 +134,7 @@ export default {
     },
     radio_quality() {
       return this.meas
-        ? "snr: " + this.meas.snr + ", rssi: " + this.meas.rssi
+        ? "snr: " + this.meas.snr + ", rssi: " + this.meas.rssi + ", SF: " + this.meas.sf
         : "";
     },
     status() {
