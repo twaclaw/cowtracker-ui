@@ -47,7 +47,7 @@ export default {
   },
   proxy: {
     '/api/v1': {
-      target: process.env.BASE_URL || 'https://pangote.fernandosandoval.eu:443'
+      target: process.env.BASE_URL || 'https://@DOMAIN:443'
     }
   },
   bootstrapVue: {
