@@ -38,8 +38,14 @@
     <b-list-group>
       <b-list-group-item>
         <p class="h5 mb-1">
-          <b-icon icon="geo-fill"></b-icon>
+          <b-icon
+            icon="geo-fill"
+            :variant="gps_variant"
+            @mouseover="hover_gps = true"
+            @mouseleave="hover_gps = false"
+          ></b-icon>
           {{ position }}
+          <span v-if="hover_gps" style="color:gray;">[ {{ gps_timestamp }} ]</span>
         </p>
       </b-list-group-item>
 
@@ -77,6 +83,8 @@ export default {
       battery_icon: "battery-full",
       battery_variant: "",
       time_variant: "",
+      gps_variant: "",
+      hover_gps: false,
     };
   },
   props: {
@@ -128,13 +136,24 @@ export default {
     },
     last_seen() {
       if (this.meas) {
-        return this.from_now(this.meas.t);
+        return this.from_now(this.meas.lastseen);
+      }
+      return "";
+    },
+    gps_timestamp() {
+      if (this.meas) {
+        return this.from_now(this.meas.lastseen);
       }
       return "";
     },
     radio_quality() {
       return this.meas
-        ? "snr: " + this.meas.snr + ", rssi: " + this.meas.rssi + ", SF: " + this.meas.sf
+        ? "snr: " +
+            this.meas.snr +
+            ", rssi: " +
+            this.meas.rssi +
+            ", SF: " +
+            this.meas.sf
         : "";
     },
     status() {
@@ -144,6 +163,7 @@ export default {
       if (this.meas && this.meas.warnings) {
         let warns = [];
         this.time_variant = "";
+        this.gps_variant = "";
         this.battery_variant = "";
         this.battery_icon = "battery-full";
 
@@ -151,19 +171,29 @@ export default {
           let w = this.meas.warnings[wi];
           if (w.code === "WARN_NO_MSGS_RECV") {
             this.time_variant = w.variant;
-          } else if (w.code === "WARN_BATT_LOW") {
+          }
+
+          if (w.code === "WARN_NO_GPS_FIX") {
+            this.gps_variant = w.variant;
+          }
+
+          if (w.code === "WARN_BATT_LOW") {
             this.battery_variant = w.variant;
             if (w.variant === "warning") {
               this.battery_icon = "battery-half";
             } else if (w.variant === "danger") {
               this.battery_icon = "battery-half";
             }
-          } else if (w.code === "WARN_COW_NOT_MOVING") {
+          }
+
+          if (w.code === "WARN_COW_NOT_MOVING") {
             warns.push({
               variant: w.variant,
               msg: "El animal no se mueve desde " + this.from_now(w.value),
             });
-          } else if (w.code === "WARN_COW_TOO_FAR") {
+          }
+
+          if (w.code === "WARN_COW_TOO_FAR") {
             warns.push({
               variant: w.variant,
               msg: "A más de " + w.value + "m del Ortigal.",
