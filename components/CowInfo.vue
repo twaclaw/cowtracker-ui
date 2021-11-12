@@ -142,7 +142,7 @@ export default {
     },
     gps_timestamp() {
       if (this.meas) {
-        return this.from_now(this.meas.lastseen);
+        return this.from_now(this.meas.t);
       }
       return "";
     },
